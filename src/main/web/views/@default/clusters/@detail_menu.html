@@ -1,0 +1,7 @@
+<div class="second-menu">
+	<div class="ui menu text blue small">
+		<a :href="'/clusters/detail?clusterId=' + cluster.id" class="item" :class="{active:urlPrefix('/clusters/detail', '/clusters/node')}">{{cluster.name}} &raquo; 详情</a>
+		<a :href="'/clusters/update?clusterId=' + cluster.id" class="item" :class="{active:urlPrefix('/clusters/update')}">修改</a>
+	</div>
+	<div class="ui divider"></div>
+</div>

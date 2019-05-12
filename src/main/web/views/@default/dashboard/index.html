@@ -1,0 +1,28 @@
+{$layout}
+
+<table class="ui table definition selectable">
+	<tr>
+		<td class="title">集群通讯地址</td>
+		<td>{{manager.addr}}
+			<p class="comment">如需修改此地址，请编辑<em>configs/config.yml</em>文件并重启服务</p>
+		</td>
+	</tr>
+	<tr>
+		<td>服务状态</td>
+		<td>
+			<span v-if="manager.isListening" class="green">启动中</span>
+			<span v-if="!manager.isListening" class="red">已停止</span><span v-if="manager.error.length > 0" class="red">：{{error}}</span>
+			<div class="op-box" v-if="manager.isListening">
+				<a href="" @click.prevent="stop()">[停止]</a> &nbsp;
+				<a href="" @click.prevent="restart()">[重新启动]</a>
+			</div>
+			<div class="op-box" v-if="!manager.isListening">
+				<a href="" @click.prevent="start()">[启动]</a> &nbsp;
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>已连接节点</td>
+		<td>{{manager.countNodes}}个</td>
+	</tr>
+</table>

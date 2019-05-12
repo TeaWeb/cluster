@@ -1,0 +1,65 @@
+{$layout}
+{$template "menu"}
+{$template "detail_menu"}
+
+<h3>节点详情</h3>
+<table class="ui table definition selectable">
+	<tr>
+		<td class="title">节点ID</td>
+		<td>{{node.id}}</td>
+	</tr>
+	<tr>
+		<td>角色</td>
+		<td>
+			<strong v-if="node.role == 'MASTER'">{{node.role}}</strong>
+			<var v-if="node.role != 'MASTER'">{{node.role}}</var>
+		</td>
+	</tr>
+	<tr>
+		<td>节点名称</td>
+		<td>{{node.name}}</td>
+	</tr>
+	<tr>
+		<td>节点地址</td>
+		<td>{{node.addr}}</td>
+	</tr>
+	<tr>
+		<td>节点状态</td>
+		<td>
+			<span v-if="node.isActive" class="green" title="在线"><i class="icon linkify small"></i>在线</span>
+			<span v-if="!node.isActive" class="disabled" title="离线"><i class="icon unlink small"></i>离线</span>
+		</td>
+	</tr>
+	<tr>
+		<td>配置同步</td>
+		<td>
+			<span v-if="syncTime.length > 0">上次同步时间：{{syncTime}}</span>
+			<span v-if="syncTime.length == 0" class="disabled">暂时还没有同步</span>
+			<p class="comment" v-if="node.isActive && !node.isMaster">
+				<a href="">立即同步</a>
+			</p>
+		</td>
+	</tr>
+</table>
+
+<h3 style="padding-top:0.8em" v-if="node.isMaster">Master数据<em>({{items.length}})</em></h3>
+<div v-if="node.isMaster" class="items-box">
+	<span class="ui label small" v-for="item in items">{{item.id}}: {{item.size}} bytes</span>
+</div>
+
+
+<h3 style="padding-top:0.8em">同步记录</h3>
+<span v-if="logs.length  == 0" class="disabled">暂时还没有同步记录。 </span>
+
+<table class="ui table selectable logs-table" v-if="logs.length > 0">
+	<thead>
+		<tr>
+			<th style="width:12em">时间</th>
+			<th>动作</th>
+		</tr>
+	</thead>
+	<tr v-for="log in logs">
+		<td>{{log.datetime}}</td>
+		<td>{{log.action}}</td>
+	</tr>
+</table>

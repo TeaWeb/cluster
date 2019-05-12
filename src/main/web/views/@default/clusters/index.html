@@ -1,0 +1,21 @@
+{$layout}
+{$template "menu"}
+
+<p class="comment" v-if="clusters.length == 0">暂时还没有集群。</p>
+
+<table class="ui table selectable" v-if="clusters.length > 0">
+	<thead>
+		<tr>
+			<th>名称</th>
+			<th>节点数</th>
+			<th class="two op">操作</th>
+		</tr>
+	</thead>
+	<tr v-for="cluster in clusters">
+		<td><a :href="'/clusters/detail?clusterId=' + cluster.id">{{cluster.name}}</a></td>
+		<td>{{cluster.countNodes}}</td>
+		<td>
+			<a href="" @click.prevent="deleteCluster(cluster.id)">删除</a>
+		</td>
+	</tr>
+</table>

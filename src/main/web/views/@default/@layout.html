@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TeaWeb Cluster</title>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+	<link rel="shortcut icon" href="/images/favicon.png"/>
+	<link rel="stylesheet" type="text/css" href="/_/@default/@layout.css" media="all"/>
+
+	{$TEA.SEMANTIC}
+	{$TEA.VUE}
+	{$echo "header"}
+	<script type="text/javascript" src="/_/@default/@layout.js"></script>
+</head>
+<body>
+
+<div>
+	<!-- 顶部导航 -->
+	<div class="ui menu inverted top-nav blue small borderless" v-cloak="">
+		<a href="/" class="item"><i class="icon leaf"></i>{{teaName}} &nbsp; <sup>v{{teaVersion}}</sup></a>
+		<div class="right menu">
+			<!--<a href="/settings/profile" class="item"  :class="{active: teaMenu == 'settings.profile'}">
+				<i class="icon user" v-if="teaUserAvatar.length == 0"></i>
+				<img class="avatar" :src="teaUserAvatar" v-if="teaUserAvatar.length > 0"/>
+				{{teaUsername}}
+			</a>
+			<a v-if="teaIsSuper" :href="Tea.url('settings')" class="item" :class="{active: teaMenu == 'settings'}"><i class="icon setting"></i>设置</a>
+			<a v-if="!teaIsSuper" :href="Tea.url('settings.login')" class="item" :class="{active: teaMenu == 'settings'}"><i class="icon setting"></i>设置</a>
+			<a :href="Tea.url('logout')" class="item" title="安全退出登录"><i class="icon sign out"></i>退出</a>
+			-->
+		</div>
+	</div>
+
+	<!-- 左侧主菜单 -->
+	<div class="main-menu" v-cloak="">
+		<div class="ui labeled menu vertical blue inverted tiny borderless">
+			<a class="item"></a>
+			<!--<a :href="Tea.url('dashboard')" class="item" :class="{active:teaMenu == 'dashboard'}">
+				<i class="ui dashboard icon"></i>
+				<span>仪表板</span>
+			</a>-->
+
+			<!-- 模块 -->
+			<a v-for="module in teaModules" class="item" :href="module.url" :class="{active:teaMenu == module.code}">
+				<i class="window restore outline icon" v-if="module.icon == null"></i>
+				<i class="ui icon" v-if="module.icon != null" :class="module.icon"></i>
+				<span>{{module.menuName}}</span>
+			</a>
+		</div>
+	</div>
+
+
+	<!-- 主体内容 -->
+	<div class="main without-menu">{$TEA.VIEW}</div>
+</div>
+
+</body>
+</html>

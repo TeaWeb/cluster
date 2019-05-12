@@ -1,0 +1,19 @@
+h3 em {
+    font-size: 0.9em;
+    font-style: normal;
+    padding-left: 0.4em;
+}
+
+.items-box {
+    max-height: 10em;
+    overflow-y: auto;
+}
+
+.items-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.items-box .label {
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}
