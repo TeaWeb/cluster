@@ -18,6 +18,7 @@ func init() {
 			Get("/detail", new(DetailAction)).
 			Post("/node/delete", new(NodeDeleteAction)).
 			Get("/node/detail", new(NodeDetailAction)).
+			Post("/node/sync", new(NodeSyncAction)).
 			EndAll()
 	})
 }

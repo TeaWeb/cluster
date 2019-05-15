@@ -131,14 +131,14 @@ func (this *Manager) Stop() error {
 }
 
 // TODO cache nodeId -> conn mapping to improve performance
-func (this *Manager) FindNodeState(nodeId string) (state *configs.NodeState, conn *NodeConnection) {
+func (this *Manager) FindNodeState(clusterId string, nodeId string) (state *configs.NodeState, conn *NodeConnection) {
 	this.locker.Lock()
 	defer this.locker.Unlock()
 
 	state = configs.NewNodeState()
 
 	for _, nodeConn := range this.connList {
-		if nodeConn.NodeId == nodeId {
+		if nodeConn.ClusterId == clusterId && nodeConn.NodeId == nodeId {
 			state.IsActive = true
 			conn = nodeConn
 		}
@@ -167,6 +167,19 @@ func (this *Manager) CountNodes() int {
 	count := 0
 	for _, nodeConn := range this.connList {
 		if len(nodeConn.NodeId) > 0 {
+			count ++
+		}
+	}
+	return count
+}
+
+func (this *Manager) CountClusterNodes(clusterId string) int {
+	this.locker.Lock()
+	defer this.locker.Unlock()
+
+	count := 0
+	for _, nodeConn := range this.connList {
+		if len(nodeConn.NodeId) > 0 && nodeConn.ClusterId == clusterId {
 			count ++
 		}
 	}

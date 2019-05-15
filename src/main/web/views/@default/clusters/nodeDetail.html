@@ -36,7 +36,7 @@
 			<span v-if="syncTime.length > 0">上次同步时间：{{syncTime}}</span>
 			<span v-if="syncTime.length == 0" class="disabled">暂时还没有同步</span>
 			<p class="comment" v-if="node.isActive && !node.isMaster">
-				<a href="">立即同步</a>
+				<a href="" @click.prevent="sync()">立即同步</a>
 			</p>
 		</td>
 	</tr>

@@ -21,6 +21,7 @@ func init() {
 		new(PullAction),
 		new(PingAction),
 		new(SyncAction),
+		new(SumAction),
 	)
 
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
@@ -33,20 +34,21 @@ func init() {
 			}
 		}
 
+		// setup databases
 		{
 			db1, err := leveldb.OpenFile(Tea.Root+"/data/items.db", nil)
 			if err != nil {
 				logs.Error(errors.New("[items.db]" + err.Error()))
 				os.Exit(0)
 			}
-			itemsDB = db1
+			SharedItemManager.SetDB(db1)
 
 			db2, err := leveldb.OpenFile(Tea.Root+"/data/logs.db", nil)
 			if err != nil {
 				logs.Error(errors.New("[logs.db]" + err.Error()))
 				os.Exit(0)
 			}
-			logsDB = db2
+			SharedLogManager.SetDB(db2)
 		}
 	})
 }

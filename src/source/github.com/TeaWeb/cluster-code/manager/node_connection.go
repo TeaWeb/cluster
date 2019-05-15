@@ -48,7 +48,9 @@ func (this *NodeConnection) Listen() error {
 	// read actions
 	this.Read(func(action ActionInterface) {
 		if len(this.NodeId) > 0 {
-			logs.Println("[manager]["+this.NodeId+"]receive action:", action.Name())
+			if action.Name() != "ping" {
+				logs.Println("[manager]["+this.NodeId+"]receive action:", action.Name())
+			}
 		} else {
 			logs.Println("[manager]receive action:", action.Name())
 		}
@@ -112,4 +114,8 @@ func (this *NodeConnection) Close() error {
 		return err
 	}
 	return nil
+}
+
+func (this *NodeConnection) IsAuthenticated() bool {
+	return len(this.ClusterId) > 0 && len(this.NodeId) > 0
 }

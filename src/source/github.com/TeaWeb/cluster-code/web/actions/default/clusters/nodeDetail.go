@@ -25,7 +25,7 @@ func (this *NodeDetailAction) RunGet(params struct {
 		this.Fail("找不到节点")
 	}
 
-	state, _ := manager.SharedManager.FindNodeState(node.Id)
+	state, _ := manager.SharedManager.FindNodeState(cluster.Id, node.Id)
 	this.Data["node"] = maps.Map{
 		"id":       node.Id,
 		"name":     node.Name,

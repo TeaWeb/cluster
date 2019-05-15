@@ -12,3 +12,4 @@ manager socket <-- | node: register, sync, notify, ping, ... |
 * pull 6
 * ping 7
 * sync 8
+* sum 9

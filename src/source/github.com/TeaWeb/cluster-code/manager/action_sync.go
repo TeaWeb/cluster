@@ -12,7 +12,7 @@ type SyncAction struct {
 }
 
 func (this *SyncAction) Name() string {
-	return "diff"
+	return "sync"
 }
 
 func (this *SyncAction) TypeId() int8 {

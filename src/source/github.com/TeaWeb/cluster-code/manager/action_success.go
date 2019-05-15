@@ -1,9 +1,12 @@
 package manager
 
+import "github.com/iwind/TeaGo/maps"
+
 type SuccessAction struct {
 	Action
 
 	Message string
+	Data    maps.Map
 }
 
 func (this *SuccessAction) Name() string {

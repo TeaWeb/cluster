@@ -2,11 +2,7 @@ package manager
 
 import (
 	"errors"
-	"fmt"
 	"github.com/iwind/TeaGo/logs"
-	"github.com/iwind/TeaGo/types"
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/syndtr/goleveldb/leveldb/util"
 	"source/github.com/TeaWeb/cluster-code/configs"
 	"time"
 )
@@ -23,6 +19,13 @@ func (this *PushAction) Name() string {
 }
 
 func (this *PushAction) Execute(nodeConn *NodeConnection) error {
+	if !nodeConn.IsAuthenticated() {
+		nodeConn.Reply(this, &FailAction{
+			Message: "client was not authenticated",
+		})
+		return nil
+	}
+
 	if nodeConn == nil {
 		return errors.New("'nodeConn' should not be nil")
 	}
@@ -36,62 +39,30 @@ func (this *PushAction) Execute(nodeConn *NodeConnection) error {
 		return errors.New("node '" + nodeConn.ClusterId + "/" + nodeConn.NodeId + "' not found")
 	}
 
-	if node.Role != configs.NodeRoleMaster {
+	if !node.IsMaster() {
 		return errors.New("node '" + nodeConn.ClusterId + "/" + nodeConn.NodeId + "' not master")
 	}
 
-	if itemsDB == nil {
-		return errors.New("'itemsDB' should not be nil")
-	}
-
 	// current version
-	versionBytes, err := itemsDB.Get([]byte("/cluster/"+cluster.Id+"/info/version"), nil)
+	version, err := SharedItemManager.FindClusterVersion(cluster.Id)
 	if err != nil {
-		if err != leveldb.ErrNotFound {
-			logs.Error(err)
-		}
-		versionBytes = []byte("0")
+		return err
 	}
-	version := types.Int(string(versionBytes))
 
 	// TODO archive current version, so we can rollback later
 
-	// remove DELETED items
-	itemsMap := map[string]*configs.Item{}
-	for _, item := range this.Items {
-		itemsMap[item.Id] = item
-	}
-
-	it := itemsDB.NewIterator(util.BytesPrefix([]byte("/cluster/"+nodeConn.ClusterId+"/master/")), nil)
-	for it.Next() {
-		item := configs.UnmarshalItem(it.Value())
-		if item != nil {
-			_, ok := itemsMap[item.Id]
-			if !ok {
-				err := itemsDB.Delete(it.Key(), nil)
-				if err != nil {
-					logs.Error(err)
-				}
-			}
-		}
-	}
-	it.Release()
-
-	// write items
-	for _, item := range this.Items {
-		err := itemsDB.Put([]byte("/cluster/"+nodeConn.ClusterId+"/master/"+item.Id), item.Marshal(), nil)
-		if err != nil {
-			return err
-		}
+	err = SharedItemManager.WriteClusterItems(cluster.Id, this.Items)
+	if err != nil {
+		return err
 	}
 
 	// /cluster/${clusterId}/info/*
-	err = itemsDB.Put([]byte("/cluster/"+cluster.Id+"/info/time"), []byte(fmt.Sprintf("%d", time.Now().Unix())), nil)
+	err = SharedItemManager.UpdateClusterTime(cluster.Id)
 	if err != nil {
 		logs.Error(err)
 	}
 
-	err = itemsDB.Put([]byte("/cluster/"+cluster.Id+"/info/version"), []byte(fmt.Sprintf("%d", version+1)), nil)
+	err = SharedItemManager.UpdateClusterVersion(cluster.Id, version+1)
 	if err != nil {
 		logs.Error(err)
 	}
@@ -111,7 +82,7 @@ func (this *PushAction) Execute(nodeConn *NodeConnection) error {
 			continue
 		}
 
-		state, conn := SharedManager.FindNodeState(node.Id)
+		state, conn := SharedManager.FindNodeState(cluster.Id, node.Id)
 		if !state.IsActive {
 			continue
 		}

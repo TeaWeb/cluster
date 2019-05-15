@@ -1,9 +1,7 @@
 package manager
 
 import (
-	"errors"
 	"github.com/iwind/TeaGo/logs"
-	"github.com/syndtr/goleveldb/leveldb/util"
 	"source/github.com/TeaWeb/cluster-code/configs"
 	"time"
 )
@@ -20,21 +18,22 @@ func (this *PullAction) Name() string {
 }
 
 func (this *PullAction) Execute(nodeConn *NodeConnection) error {
-	if itemsDB == nil {
-		return errors.New("'itemsDB' should not be nil")
+	if !nodeConn.IsAuthenticated() {
+		nodeConn.Reply(this, &FailAction{
+			Message: "client was not authenticated",
+		})
+		return nil
 	}
 
-	prefix := "/cluster/" + nodeConn.ClusterId + "/master/"
-	it := itemsDB.NewIterator(util.BytesPrefix([]byte(prefix)), nil)
+	items, err := SharedItemManager.ReadMasterItems(nodeConn.ClusterId)
+	if err != nil {
+		return err
+	}
+
 	clusterItemsMap := map[string]*configs.Item{}
-	for it.Next() {
-		item := configs.UnmarshalItem(it.Value())
-		if item == nil {
-			continue
-		}
+	for _, item := range items {
 		clusterItemsMap[item.Id] = item
 	}
-	it.Release()
 
 	// local items map
 	localItemsMap := map[string]*configs.Item{}
@@ -65,7 +64,7 @@ func (this *PullAction) Execute(nodeConn *NodeConnection) error {
 	}
 
 	// log
-	err := SharedLogManager.Write(nodeConn.ClusterId, nodeConn.NodeId, &configs.NodeLog{
+	err = SharedLogManager.Write(nodeConn.ClusterId, nodeConn.NodeId, &configs.NodeLog{
 		Timestamp: time.Now().Unix(),
 		Action:    "pull",
 	})
