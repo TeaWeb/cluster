@@ -71,7 +71,7 @@ func (this *NodeConnection) Read(f func(action ActionInterface)) {
 			if err == io.EOF {
 				break
 			}
-			logs.Error(err)
+			//logs.Error(err) // always is a closed error
 			break
 		}
 		instance := FindActionInstance(typeId)

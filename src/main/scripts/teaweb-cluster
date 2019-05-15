@@ -1,0 +1,27 @@
+#! /bin/bash
+#
+# teaweb       TeaWeb cluster console
+#
+# chkconfig: 2345 40 90
+# description: TeaWeb cluster console
+
+# teaweb cluster install dir
+INSTALL_DIR=/opt/teaweb-cluster
+
+case "$1" in
+start)
+    ${INSTALL_DIR}/bin/teaweb-cluster start
+    ;;
+stop)
+    ${INSTALL_DIR}/bin/-cluster stop
+    ;;
+restart)
+    ${INSTALL_DIR}/bin/-cluster restart
+    ;;
+status)
+    ${INSTALL_DIR}/bin/teaweb-cluster status
+    ;;
+*)
+    echo $"Usage: $0 {start|stop|restart|status}"
+    exit 2
+esac
