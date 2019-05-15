@@ -9,7 +9,14 @@ import (
 type AuthHelper struct {
 }
 
-func (this *AuthHelper) BeforeAction(action *actions.ActionObject) {
+func (this *AuthHelper) BeforeAction(action *actions.ActionObject) (goNext bool) {
+	var session = action.Session()
+	var username = session.GetString("username")
+	if len(username) == 0 {
+		this.login(action)
+		return false
+	}
+
 	action.Data["teaVersion"] = consts.Version
 	action.Data["teaName"] = "TeaWeb Cluster"
 	action.Data["teaUserAvatar"] = ""
@@ -33,4 +40,10 @@ func (this *AuthHelper) BeforeAction(action *actions.ActionObject) {
 
 	action.Data["teaModules"] = modules
 	action.Data["teaMenu"] = "dashboard"
+
+	return true
+}
+
+func (this *AuthHelper) login(action *actions.ActionObject) {
+	action.RedirectURL("/login")
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>TeaWeb Cluster</title>
+	<title>TeaWeb Cluster Console</title>
 	<meta charset="UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
 	<link rel="shortcut icon" href="/images/favicon.png"/>
@@ -25,9 +25,8 @@
 				{{teaUsername}}
 			</a>
 			<a v-if="teaIsSuper" :href="Tea.url('settings')" class="item" :class="{active: teaMenu == 'settings'}"><i class="icon setting"></i>设置</a>
-			<a v-if="!teaIsSuper" :href="Tea.url('settings.login')" class="item" :class="{active: teaMenu == 'settings'}"><i class="icon setting"></i>设置</a>
+			<a v-if="!teaIsSuper" :href="Tea.url('settings.login')" class="item" :class="{active: teaMenu == 'settings'}"><i class="icon setting"></i>设置</a>-->
 			<a :href="Tea.url('logout')" class="item" title="安全退出登录"><i class="icon sign out"></i>退出</a>
-			-->
 		</div>
 	</div>
 
@@ -52,6 +51,13 @@
 
 	<!-- 主体内容 -->
 	<div class="main without-menu">{$TEA.VIEW}</div>
+
+	<div id="footer" class="ui menu inverted light-blue borderless small">
+		<a href="https://github.com/TeaWeb/cluster" target="_blank" class="item">GitHub</a>
+		<a href="http://teaos.cn" target="_blank" class="item">官网</a>
+		<a href="http://teaos.cn/doc" target="_blank" class="item">文档</a>
+		<a href="https://github.com/TeaWeb/cluster/issues" target="_blank" class="item">提Bug</a>
+	</div>
 </div>
 
 </body>

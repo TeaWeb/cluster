@@ -3,12 +3,15 @@ package main
 import (
 	"github.com/iwind/TeaGo"
 	"github.com/iwind/TeaGo/Tea"
+	"github.com/iwind/TeaGo/sessions"
 	"os"
 	"path/filepath"
 	"source/github.com/TeaWeb/cluster-code/manager"
 	_ "source/github.com/TeaWeb/cluster-code/web/actions/default/clusters"
 	_ "source/github.com/TeaWeb/cluster-code/web/actions/default/dashboard"
 	_ "source/github.com/TeaWeb/cluster-code/web/actions/default/index"
+	_ "source/github.com/TeaWeb/cluster-code/web/actions/default/login"
+	_ "source/github.com/TeaWeb/cluster-code/web/actions/default/logout"
 )
 
 func main() {
@@ -19,9 +22,13 @@ func main() {
 	manager.SharedManager.StartInBackground()
 
 	// start server
-	TeaGo.NewServer(false).
+	server := TeaGo.NewServer(false).
 		AccessLog(false).
-		Start()
+		Session(sessions.NewFileSessionManager(
+			86400,
+			"c9f5ee602110028c8b7c9aa10af0b000",
+		))
+	server.Start()
 }
 
 func setRoot() {
