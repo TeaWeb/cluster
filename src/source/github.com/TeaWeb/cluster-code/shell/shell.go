@@ -5,7 +5,9 @@ import (
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/files"
 	"github.com/iwind/TeaGo/lists"
+	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/types"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -34,6 +36,16 @@ func (this *Shell) Start() {
 	// write current pid
 	files.NewFile(Tea.Root + Tea.DS + "bin" + Tea.DS + "pid").
 		WriteString(fmt.Sprintf("%d", os.Getpid()))
+
+	// log
+	if !Tea.IsTesting() {
+		fp, err := os.OpenFile(Tea.Root+"/logs/run.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+		if err == nil {
+			log.SetOutput(fp)
+		} else {
+			logs.Println("[error]" + err.Error())
+		}
+	}
 }
 
 // reset root
@@ -84,7 +96,7 @@ func (this *Shell) execArgs() bool {
 	}
 
 	if len(args) > 0 {
-		fmt.Println("Unknown command option '" + strings.Join(args, " ") + "', run './bin/teaweb -h' to lookup the usage.")
+		fmt.Println("Unknown command option '" + strings.Join(args, " ") + "', run './bin/teaweb-cluster -h' to lookup the usage.")
 		return true
 	}
 	return false

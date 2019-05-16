@@ -25,6 +25,20 @@ export GOARCH=386
 
 build
 
+# linux arm64
+export GOPATH=`pwd`/../../
+export GOOS=linux
+export GOARCH=arm64
+
+build
+
+# linux arm32
+export GOPATH=`pwd`/../../
+export GOOS=linux
+export GOARCH=arm
+
+build
+
 # windows 64
 export GOPATH=`pwd`/../../
 export GOOS=windows

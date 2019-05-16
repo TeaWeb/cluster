@@ -34,6 +34,7 @@ function build() {
     mkdir ${TARGET}/web/tmp
     mkdir ${TARGET}/configs
     mkdir ${TARGET}/data
+    mkdir ${TARGET}/logs
 
     echo "[build static file]"
 
