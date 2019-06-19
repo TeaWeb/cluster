@@ -13,10 +13,10 @@ start)
     ${INSTALL_DIR}/bin/teaweb-cluster start
     ;;
 stop)
-    ${INSTALL_DIR}/bin/-cluster stop
+    ${INSTALL_DIR}/bin/teaweb-cluster stop
     ;;
 restart)
-    ${INSTALL_DIR}/bin/-cluster restart
+    ${INSTALL_DIR}/bin/teaweb-cluster restart
     ;;
 status)
     ${INSTALL_DIR}/bin/teaweb-cluster status
