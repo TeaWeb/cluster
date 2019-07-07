@@ -225,6 +225,10 @@ func (this *Shell) checkPid() *os.Process {
 		return nil
 	}
 
+	if runtime.GOOS == "windows" {
+		return proc
+	}
+
 	err = proc.Signal(syscall.Signal(0))
 	if err != nil {
 		return nil
