@@ -10,7 +10,7 @@
 	<tr>
 		<td>服务状态</td>
 		<td>
-			<span v-if="manager.isListening" class="green">启动中</span>
+			<span v-if="manager.isListening" class="green">已启动</span>
 			<span v-if="!manager.isListening" class="red">已停止</span><span v-if="manager.error.length > 0" class="red">：{{error}}</span>
 			<div class="op-box" v-if="manager.isListening">
 				<a href="" @click.prevent="stop()">[停止]</a> &nbsp;

@@ -49,10 +49,10 @@ func (this *NodeConnection) Listen() error {
 	this.Read(func(action ActionInterface) {
 		if len(this.NodeId) > 0 {
 			if action.Name() != "ping" {
-				logs.Println("[manager]["+this.NodeId+"]receive action:", action.Name())
+				logs.Println("[manager]["+this.Conn.RemoteAddr().String()+"]["+this.NodeId+"]receive action:", action.Name())
 			}
 		} else {
-			logs.Println("[manager]receive action:", action.Name())
+			logs.Println("[manager]["+this.Conn.RemoteAddr().String()+"]receive action:", action.Name())
 		}
 		err := action.Execute(this)
 		if err != nil {

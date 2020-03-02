@@ -70,9 +70,9 @@ func (this *Manager) Start() error {
 		}
 
 		this.locker.Lock()
-		this.connId ++
+		this.connId++
 
-		logs.Println("[manager]receive a node connection", this.connId)
+		logs.Println("[manager]["+conn.RemoteAddr().String()+"]receive a node connection", this.connId)
 
 		nodeConn := NewNodeConnection(this.connId)
 		nodeConn.Conn = conn
@@ -167,7 +167,7 @@ func (this *Manager) CountNodes() int {
 	count := 0
 	for _, nodeConn := range this.connList {
 		if len(nodeConn.NodeId) > 0 {
-			count ++
+			count++
 		}
 	}
 	return count
@@ -180,7 +180,7 @@ func (this *Manager) CountClusterNodes(clusterId string) int {
 	count := 0
 	for _, nodeConn := range this.connList {
 		if len(nodeConn.NodeId) > 0 && nodeConn.ClusterId == clusterId {
-			count ++
+			count++
 		}
 	}
 	return count
