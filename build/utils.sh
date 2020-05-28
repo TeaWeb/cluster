@@ -3,10 +3,11 @@
 # shell utilities
 
 function build() {
-    VERSION_DATA=`cat ${GOPATH}/src/source/github.com/TeaWeb/cluster-code/consts/consts.go`
+	ROOT=`pwd`/../
+    VERSION_DATA=`cat ${ROOT}/internal/consts/consts.go`
     VERSION_DATA=${VERSION_DATA#*"Version = \""}
     VERSION=${VERSION_DATA%%[!0-9.]*}
-    TARGET=${GOPATH}/dist/teaweb-cluster-v${VERSION}
+    TARGET=${ROOT}/dist/teaweb-cluster-v${VERSION}
     EXT=""
     if [ ${GOOS} = "windows" ]
     then
@@ -18,9 +19,9 @@ function build() {
     echo "[goversion]using" `go version`
     echo "[create target directory]"
 
-    if [ ! -d ${GOPATH}/dist ]
+    if [ ! -d ${ROOT}/dist ]
     then
-		mkdir ${GOPATH}/dist
+		mkdir ${ROOT}/dist
     fi
 
     if [ -d ${TARGET} ]
@@ -39,20 +40,20 @@ function build() {
     echo "[build static file]"
 
     # build main & plugin
-    go build -ldflags="-s -w" -o ${TARGET}/bin/teaweb-cluster${EXT} ${GOPATH}/src/source/github.com/TeaWeb/cluster-code/main/main.go
+    go build -ldflags="-s -w" -o ${TARGET}/bin/teaweb-cluster${EXT} ${ROOT}/cmd/cluster/main.go
 
     echo "[copy files]"
-    cp -R ${GOPATH}/src/main/configs/admin.sample.yml ${TARGET}/configs/admin.yml
-    cp -R ${GOPATH}/src/main/configs/server.sample.conf ${TARGET}/configs/server.conf
-    cp -R ${GOPATH}/src/main/configs/config.sample.yml ${TARGET}/configs/config.yml
-    cp -R ${GOPATH}/src/main/scripts ${TARGET}
+    cp -R ${ROOT}/build/configs/admin.sample.yml ${TARGET}/configs/admin.yml
+    cp -R ${ROOT}/build/configs/server.sample.conf ${TARGET}/configs/server.conf
+    cp -R ${ROOT}/build/configs/config.sample.yml ${TARGET}/configs/config.yml
+    cp -R ${ROOT}/build/scripts ${TARGET}
 
-    cp -R ${GOPATH}/src/main/web/public ${TARGET}/web/
-    cp -R ${GOPATH}/src/main/web/views ${TARGET}/web/
+    cp -R ${ROOT}/web/public ${TARGET}/web/
+    cp -R ${ROOT}/web/views ${TARGET}/web/
 
     if [ ${GOOS} = "windows" ]
     then
-        cp ${GOPATH}/src/main/start.bat ${TARGET}
+        cp ${ROOT}/build/start.bat ${TARGET}
     fi
 
     echo "[zip files]"

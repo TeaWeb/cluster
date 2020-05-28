@@ -2,8 +2,6 @@
 
 . utils.sh
 
-export GOPATH=`pwd`/../../
-
 # darwin
 export GOOS=darwin
 export GOARCH=amd64
