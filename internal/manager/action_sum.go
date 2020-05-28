@@ -32,5 +32,5 @@ func (this *SumAction) Execute(nodeConn *NodeConnection) error {
 }
 
 func (this *SumAction) TypeId() int8 {
-	return 9
+	return ActionCodeSum
 }

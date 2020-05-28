@@ -106,5 +106,5 @@ func (this *PushAction) AddItem(item *configs.Item) {
 }
 
 func (this *PushAction) TypeId() int8 {
-	return 5
+	return ActionCodePush
 }

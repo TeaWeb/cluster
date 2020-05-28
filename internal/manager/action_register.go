@@ -102,5 +102,5 @@ func (this *RegisterAction) Execute(nodeConn *NodeConnection) error {
 }
 
 func (this *RegisterAction) TypeId() int8 {
-	return 3
+	return ActionCodeRegister
 }

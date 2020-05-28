@@ -22,5 +22,5 @@ func (this *PingAction) Execute(nodeConn *NodeConnection) error {
 }
 
 func (this *PingAction) TypeId() int8 {
-	return 7
+	return ActionCodePing
 }

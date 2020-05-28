@@ -78,5 +78,5 @@ func (this *PullAction) Execute(nodeConn *NodeConnection) error {
 }
 
 func (this *PullAction) TypeId() int8 {
-	return 6
+	return ActionCodePull
 }
